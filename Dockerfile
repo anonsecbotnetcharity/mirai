@@ -9,13 +9,10 @@ RUN curl -SsL https://playit-cloud.github.io/ppa/key.gpg | apt-key add -
 RUN curl -SsL -o /etc/apt/sources.list.d/playit-cloud.list https://playit-cloud.github.io/ppa/playit-cloud.list
 
 RUN apt-get update && \
-    apt-get install -y playit
-    apt-get install -y apache2
-COPY AXIS_CNC.c /app/AXIS_CNC.c
-COPY start.sh /app/start.sh
-WORKDIR /app
+    apt-get install -y playit apache2 && \
+    gcc -o AXIS /app/AXIS_CNC.c -pthread
 
-RUN gcc -o AXIS AXIS_CNC.c -pthread && \
-    chmod +x start.sh
-
-CMD ["/app/start.sh"]
+CMD screen -S AXIS_session -d -m "./AXIS 35829 1 35821" && \
+    tmux new-session -d -s playit_session "playit" && \
+    service apache2 start && \
+    tmux attach-session -t playit_session
