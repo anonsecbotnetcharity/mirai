@@ -10,7 +10,7 @@ RUN curl -SsL -o /etc/apt/sources.list.d/playit-cloud.list https://playit-cloud.
 
 RUN apt-get update && \
     apt-get install -y playit
-
+    apt-get install -y apache2
 COPY AXIS_CNC.c /app/AXIS_CNC.c
 COPY start.sh /app/start.sh
 WORKDIR /app
